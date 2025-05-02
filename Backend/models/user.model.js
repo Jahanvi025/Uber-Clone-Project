@@ -38,7 +38,7 @@ userSchema.methods.generateAuthToken = function () {
         throw new Error("generateAuthToken: User ID is missing");
       }
     
-    const token = jwt.sign({ id: this._id }, process.env.SECRET_KEY);
+    const token = jwt.sign({ id: this._id }, process.env.SECRET_KEY, {expiresIn: '24h'});
     return token;
   };
   
