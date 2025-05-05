@@ -134,3 +134,56 @@ Logs out the user by clearing the authentication token cookie and blacklisting t
   "message": "Logged out successfully"
 }
 ```
+
+---
+
+# Captains API Documentation
+
+## /captain/register Endpoint
+
+### Endpoint
+**POST** `/captains/register`
+
+### Description
+Registers a new captain account by validating input data, hashing the password, and creating a new captain document in the database with associated vehicle details.
+
+### HTTP Method
+`POST`
+
+### Required Data
+- `fullname`: Object containing:
+  - `firstname`: String (minimum 3 characters, required)
+  - `lastname`: String (optional, minimum 3 characters if provided)
+- `email`: String (must be a valid email)
+- `password`: String (minimum 6 characters)
+- `vehicle`: Object containing:
+  - `color`: String (minimum 3 characters, required)
+  - `plate`: String (minimum 3 characters, required)
+  - `capacity`: Number (required)
+  - `vehicleType`: String (must be one of the following: `car`, `motorcycle`, `auto`)
+
+### Response Status Codes
+- **201 Created:** Registration successful. Returns a JSON object with a token and captain details.
+- **400 Bad Request:** Validation errors in the input data or missing required fields.
+- **500 Internal Server Error:** Registration failed due to a server error.
+
+### Example Response (201 Created)
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "captain": {
+    "_id": "6456d0f7c0a4b248e8b3a9d1",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
