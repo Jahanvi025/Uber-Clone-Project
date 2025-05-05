@@ -139,7 +139,7 @@ Logs out the user by clearing the authentication token cookie and blacklisting t
 
 # Captains API Documentation
 
-## /captain/register Endpoint
+## /captains/register Endpoint
 
 ### Endpoint
 **POST** `/captains/register`
@@ -185,5 +185,120 @@ Registers a new captain account by validating input data, hashing the password, 
       "vehicleType": "car"
     }
   }
+}
+```
+
+---
+
+## /captains/login Endpoint
+
+### Endpoint
+**POST** `/captains/login`
+
+### Description
+Authenticates an existing captain by validating credentials. If the credentials are correct, a JSON Web Token and captain details are returned.
+
+### HTTP Method
+`POST`
+
+### Request Body Example
+```json
+{
+  "email": "jane.doe@example.com",  // Required: Must be a valid email address
+  "password": "password123"           // Required: Minimum 6 characters
+}
+```
+
+### Response Status Codes
+- **200 OK:** Login successful. Returns a JSON object with a token and captain details.
+- **400 Bad Request:** Validation errors in the input data.
+- **401 Unauthorized:** Invalid email or password.
+
+### Example Response (200 OK)
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "captain": {
+    "_id": "6456d0f7c0a4b248e8b3a9d1",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+---
+
+## /captains/profile Endpoint
+
+### Endpoint
+**GET** `/captains/profile`
+
+### Description
+Returns the authenticated captain's profile details. A valid authentication token must be provided either as a cookie or via the Authorization header.
+
+### HTTP Method
+`GET`
+
+### Required Data
+- Valid authentication token (cookie or header)
+
+### Response Status Codes
+- **200 OK:** Profile data is returned.
+- **401 Unauthorized:** When the authentication token is missing or invalid.
+
+### Example Response (200 OK)
+```json
+{
+  "captain": {
+    "_id": "6456d0f7c0a4b248e8b3a9d1",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+---
+
+## /captains/logout Endpoint
+
+### Endpoint
+**GET** `/captains/logout`
+
+### Description
+Logs out the captain by clearing the authentication token cookie and blacklisting the token to prevent further use.
+
+### HTTP Method
+`GET`
+
+### Required Data
+- The captain's authentication token should be provided via cookie or header.
+
+### Response Status Codes
+- **200 OK:** Returns a message confirming logout.
+- **400 Bad Request:** If no token is provided.
+- **500 Internal Server Error:** On server error.
+
+### Example Response (200 OK)
+```json
+{
+  "message": "Logged out successfully"
 }
 ```
