@@ -4,6 +4,7 @@ import cors from "cors";
 import db from "./db/db.js";
 import userRoutes from "./routes/user.routes.js";
 import captainRoutes from "./routes/captain.routes.js";
+import adminRoutes from './routes/admin.routes.js';
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -22,5 +23,7 @@ app.get("/",(req, res)=>{
 
 app.use('/users', userRoutes);
 app.use('/captains', captainRoutes);
+app.use('/admin', adminRoutes);
+
 
 export {app};

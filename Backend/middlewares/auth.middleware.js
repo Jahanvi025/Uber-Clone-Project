@@ -1,5 +1,6 @@
 import userModel from "../models/user.model.js";
 import captainModel from "../models/captain.model.js";
+import AdminModel from '../models/admin.model.js';
 import {BlacklistToken} from "../models/blacklistToken.model.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -69,5 +70,29 @@ export const authCaptain = async (req, res, next) => {
     } catch (err) {
         console.error("Auth Error:", err.message);
         return res.status(401).json({ message: "Unauthorized: Invalid token" });
+    }
+};
+
+
+export const authAdmin = async (req, res, next) => {
+    try {
+        const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
+        if (!token) return res.status(401).json({ message: "Access denied. No token provided." });
+
+        const isBlacklisted = await BlacklistToken.findOne({ token });
+        if (isBlacklisted) {
+            return res.status(401).json({ message: "Token has been revoked. Please log in again." });
+        }
+
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        if (decoded.role !== 'admin') return res.status(403).json({ message: "Forbidden" });
+
+        const admin = await AdminModel.findById(decoded.id);
+        if (!admin) return res.status(401).json({ message: "Admin not found" });
+
+        req.admin = admin;
+        next();
+    } catch (error) {
+        res.status(401).json({ message: "Invalid or expired token" });
     }
 };

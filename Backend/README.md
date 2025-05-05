@@ -302,3 +302,150 @@ Logs out the captain by clearing the authentication token cookie and blacklistin
   "message": "Logged out successfully"
 }
 ```
+
+
+```
+# Admin API Documentation
+
+## /admin/register Endpoint
+
+### Endpoint
+**POST** `/admin/register`
+
+### Description
+Registers a new admin account by validating input data, hashing the password, and creating a new admin document in the database.
+
+### HTTP Method
+`POST`
+
+### Required Data
+- `username`: String (required, minimum 3 characters)
+- `email`: String (must be a valid email)
+- `password`: String (minimum 6 characters)
+
+### Example Request Body
+```json
+{
+  "username": "adminuser",           // Required: Minimum 3 characters
+  "email": "admin@example.com",      // Required: Must be a valid email
+  "password": "password123"          // Required: Minimum 6 characters
+}
+```
+
+### Response Status Codes
+- **201 Created:** Registration successful. Returns a JSON object with a token and admin details.
+- **400 Bad Request:** Validation errors in the input data or if an admin with the email already exists.
+- **500 Internal Server Error:** Registration failed due to a server error.
+
+### Example Response (201 Created)
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "admin": {
+    "_id": "646a0b7cc0a4b248e8b3e9d1",
+    "username": "adminuser",
+    "email": "admin@example.com"
+  }
+}
+```
+
+---
+
+## /admin/login Endpoint
+
+### Endpoint
+**POST** `/admin/login`
+
+### Description
+Authenticates an existing admin by validating credentials. If the credentials are correct, a JSON Web Token and admin details are returned.
+
+### HTTP Method
+`POST`
+
+### Required Data
+- `email`: String (must be a valid email)
+- `password`: String (minimum 6 characters)
+
+### Example Request Body
+```json
+{
+  "email": "admin@example.com",   // Required: Must be a valid email address
+  "password": "password123"         // Required: Minimum 6 characters
+}
+```
+
+### Response Status Codes
+- **200 OK:** Login successful. Returns a JSON object with a token and admin details.
+- **400 Bad Request:** Validation errors or missing required fields.
+- **401 Unauthorized:** Invalid email or password.
+
+### Example Response (200 OK)
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "admin": {
+    "_id": "646a0b7cc0a4b248e8b3e9d1",
+    "username": "adminuser",
+    "email": "admin@example.com"
+  }
+}
+```
+
+---
+
+## /admin/profile Endpoint
+
+### Endpoint
+**GET** `/admin/profile`
+
+### Description
+Returns the authenticated admin's profile details. A valid authentication token must be provided either as a cookie or via the Authorization header.
+
+### HTTP Method
+`GET`
+
+### Required Data
+- Valid authentication token (cookie or header)
+
+### Response Status Codes
+- **200 OK:** Returns admin profile details.
+- **401 Unauthorized:** When the authentication token is missing or invalid.
+
+### Example Response (200 OK)
+```json
+{
+  "admin": {
+    "_id": "646a0b7cc0a4b248e8b3e9d1",
+    "username": "adminuser",
+    "email": "admin@example.com"
+  }
+}
+```
+
+---
+
+## /admin/logout Endpoint
+
+### Endpoint
+**GET** `/admin/logout`
+
+### Description
+Logs out the admin by clearing the authentication token cookie and blacklisting the token to prevent further use.
+
+### HTTP Method
+`GET`
+
+### Required Data
+- The admin's authentication token must be provided via cookie or header
+
+### Response Status Codes
+- **200 OK:** Returns a message confirming logout.
+- **400 Bad Request:** If no token is provided.
+- **500 Internal Server Error:** On server error.
+
+### Example Response (200 OK)
+```json
+{
+  "message": "Admin logged out successfully"
+}
+```

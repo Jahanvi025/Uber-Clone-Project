@@ -72,7 +72,7 @@ const captainSchema = new mongoose.Schema({
 
 captainSchema.methods.generateAuthToken = function () {
     if (!this._id) {
-        throw new Error("generateAuthToken: User ID is missing");
+        throw new Error("generateAuthToken: Captain ID is missing");
     }
 
     const token = jwt.sign({ id: this._id }, process.env.SECRET_KEY, { expiresIn: '24h' });
