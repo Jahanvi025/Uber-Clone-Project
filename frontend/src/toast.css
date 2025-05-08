@@ -1,0 +1,8 @@
+.toast-purple {
+    background-color: #1e1b2e !important;  /* black-ish */
+    color: #d0a8ff !important;             /* soft purple text */
+    font-weight: 500;
+    border-left: 4px solid #d0a8ff;
+    box-shadow: 0 0 10px rgba(208, 168, 255, 0.2);
+  }
+  

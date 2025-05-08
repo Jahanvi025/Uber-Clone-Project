@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
         select: false,
         required:true,
     },
+    date:{
+        type:Date,
+        default: Date.now,
+    },
     socketId:{
         type:String,
     }
